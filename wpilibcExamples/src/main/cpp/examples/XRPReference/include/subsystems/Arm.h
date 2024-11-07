@@ -17,9 +17,9 @@ class Arm : public frc2::SubsystemBase {
   /**
    * Set the current angle of the arm (0 - 180 degrees).
    *
-   * @param angleDeg the commanded angle
+   * @param angleRad the commanded angle
    */
-  void SetAngle(double angleDeg);
+  void SetAngle(units::radian_t angleRad);
 
  private:
   frc::XRPServo m_armServo{4};
