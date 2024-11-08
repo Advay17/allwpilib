@@ -10,8 +10,9 @@
 #include <frc/xrp/XRPGyro.h>
 #include <frc/xrp/XRPMotor.h>
 #include <frc2/command/SubsystemBase.h>
+
+#include <units/acceleration.h>
 #include <units/angle.h>
-#include <units/angular_velocity.h>
 #include <units/length.h>
 
 class Drivetrain : public frc2::SubsystemBase {
@@ -81,17 +82,17 @@ class Drivetrain : public frc2::SubsystemBase {
   /**
    * Returns the acceleration along the X-axis, in Gs.
    */
-  units::radians_per_second_t GetAccelX();
+  units::standard_gravity_t GetAccelX();
 
   /**
    * Returns the acceleration along the Y-axis, in Gs.
    */
-  units::radians_per_second_t GetAccelY();
+  units::standard_gravity_t GetAccelY();
 
   /**
    * Returns the acceleration along the Z-axis, in Gs.
    */
-  units::radians_per_second_t GetAccelZ();
+  units::standard_gravity_t GetAccelZ();
 
   /**
    * Returns the current angle of the Romi around the X-axis, in degrees.
