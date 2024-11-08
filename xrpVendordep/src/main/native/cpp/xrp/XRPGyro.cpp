@@ -41,7 +41,7 @@ units::radians_per_second_t XRPGyro::GetRate() const {
 
 units::radians_per_second_t XRPGyro::GetRateX() const {
   if (m_simRateX) {
-    return m_simRateX.Get();
+    return units::degrees_per_second_t{m_simRateX.Get()};
   }
 
   return 0.0_rad_per_s;
@@ -49,7 +49,7 @@ units::radians_per_second_t XRPGyro::GetRateX() const {
 
 units::radians_per_second_t XRPGyro::GetRateY() const {
   if (m_simRateY) {
-    return m_simRateY.Get();
+    return units::degrees_per_second_t{m_simRateY.Get()};
   }
 
   return 0.0_rad_per_s;
@@ -57,7 +57,7 @@ units::radians_per_second_t XRPGyro::GetRateY() const {
 
 units::radians_per_second_t XRPGyro::GetRateZ() const {
   if (m_simRateZ) {
-    return m_simRateZ.Get();
+    return units::degrees_per_second_t{m_simRateZ.Get()};
   }
 
   return 0.0_rad_per_s;
