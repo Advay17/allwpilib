@@ -116,9 +116,9 @@ class XRPGyro {
   hal::SimDouble m_simAngleY;
   hal::SimDouble m_simAngleZ;
 
-  unit::radian_t m_angleXOffset = 0.0_rad;
-  unit::radian_t m_angleYOffset = 0.0_rad;
-  unit::radian_t m_angleZOffset = 0.0_rad;
+  units::radian_t m_angleXOffset = 0.0_rad;
+  units::radian_t m_angleYOffset = 0.0_rad;
+  units::radian_t m_angleZOffset = 0.0_rad;
 };
 
 /** @} */
