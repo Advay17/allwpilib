@@ -9,6 +9,8 @@
 #include <map>
 #include <set>
 #include <string>
+#include <numbers>
+#include <units/angle.h>
 
 using namespace frc;
 
@@ -44,28 +46,28 @@ XRPServo::XRPServo(int deviceNum) {
   }
 }
 
-void XRPServo::SetAngle(double angleDegrees) {
-  if (angleDegrees < 0.0) {
-    angleDegrees = 0.0;
+void XRPServo::SetAngle(units::radian_t angleRadians) {
+  if (angleRadians < 0.0_rad) {
+    angleRadians = 0.0_rad;
   }
 
-  if (angleDegrees > 180.0) {
-    angleDegrees = 180.0;
+  if (angleRadians > units::radian_t{std::numbers::pi}) {
+    angleRadians = units::radian_t{std::numbers::pi};
   }
 
-  double pos = (angleDegrees / 180.0);
+  double pos = angleRadians.value()/std::numbers::pi;
 
   if (m_simPosition) {
     m_simPosition.Set(pos);
   }
 }
 
-double XRPServo::GetAngle() const {
+units::radian_t XRPServo::GetAngle() const {
   if (m_simPosition) {
-    return m_simPosition.Get() * 180.0;
+    return units::radian_t{m_simPosition.Get()*std::numbers::pi};
   }
 
-  return 90.0;
+  return units::radian_t{std::numbers::pi/2};
 }
 
 void XRPServo::SetPosition(double pos) {
