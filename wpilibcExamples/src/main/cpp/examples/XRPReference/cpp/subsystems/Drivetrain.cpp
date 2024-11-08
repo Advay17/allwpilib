@@ -67,11 +67,11 @@ units::standard_gravity_t Drivetrain::GetAccelX() {
   return units::standard_gravity_t{m_accelerometer.GetX()};
 }
 
-standard_gravity_t Drivetrain::GetAccelY() {
+units::standard_gravity_t Drivetrain::GetAccelY() {
   return units::standard_gravity_t{m_accelerometer.GetY()};
 }
 
-standard_gravity_t Drivetrain::GetAccelZ() {
+units::standard_gravity_t Drivetrain::GetAccelZ() {
   return units::standard_gravity_t{m_accelerometer.GetZ()};
 }
 
