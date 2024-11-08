@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <numbers>
+
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -26,12 +28,16 @@ void RobotContainer::ConfigureButtonBindings() {
       .OnFalse(frc2::cmd::Print("USER Button Released"));
 
   frc2::JoystickButton(&m_controller, 1)
-      .OnTrue(frc2::cmd::RunOnce([this] { m_arm.SetAngle(45.0); }, {}))
-      .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0); }, {}));
+      .OnTrue(frc2::cmd::RunOnce(
+          [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 4}); },
+          {}))
+      .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0_rad); }, {}));
 
   frc2::JoystickButton(&m_controller, 2)
-      .OnTrue(frc2::cmd::RunOnce([this] { m_arm.SetAngle(90.0); }, {}))
-      .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0); }, {}));
+      .OnTrue(frc2::cmd::RunOnce(
+          [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 2}); },
+          {}))
+      .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0_rad); }, {}));
 
   // Setup SmartDashboard options.
   m_chooser.SetDefaultOption("Auto Routine Distance", &m_autoDistance);

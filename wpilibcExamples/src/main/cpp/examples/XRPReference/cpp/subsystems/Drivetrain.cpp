@@ -63,27 +63,27 @@ units::meter_t Drivetrain::GetAverageDistance() {
   return (GetLeftDistance() + GetRightDistance()) / 2.0;
 }
 
-double Drivetrain::GetAccelX() {
-  return m_accelerometer.GetX();
+units::standard_gravity_t Drivetrain::GetAccelX() {
+  return units::standard_gravity_t{m_accelerometer.GetX()};
 }
 
-double Drivetrain::GetAccelY() {
-  return m_accelerometer.GetY();
+units::standard_gravity_t Drivetrain::GetAccelY() {
+  return units::standard_gravity_t{m_accelerometer.GetY()};
 }
 
-double Drivetrain::GetAccelZ() {
-  return m_accelerometer.GetZ();
+units::standard_gravity_t Drivetrain::GetAccelZ() {
+  return units::standard_gravity_t{m_accelerometer.GetZ()};
 }
 
-double Drivetrain::GetGyroAngleX() {
+units::radian_t Drivetrain::GetGyroAngleX() {
   return m_gyro.GetAngleX();
 }
 
-double Drivetrain::GetGyroAngleY() {
+units::radian_t Drivetrain::GetGyroAngleY() {
   return m_gyro.GetAngleY();
 }
 
-double Drivetrain::GetGyroAngleZ() {
+units::radian_t Drivetrain::GetGyroAngleZ() {
   return m_gyro.GetAngleZ();
 }
 
