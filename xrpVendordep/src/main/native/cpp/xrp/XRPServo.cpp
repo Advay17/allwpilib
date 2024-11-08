@@ -7,9 +7,9 @@
 #include <frc/Errors.h>
 
 #include <map>
+#include <numbers>
 #include <set>
 #include <string>
-#include <numbers>
 #include <units/angle.h>
 
 using namespace frc;
@@ -55,7 +55,7 @@ void XRPServo::SetAngle(units::radian_t angleRadians) {
     angleRadians = units::radian_t{std::numbers::pi};
   }
 
-  double pos = angleRadians.value()/std::numbers::pi;
+  double pos = angleRadians.value() / std::numbers::pi;
 
   if (m_simPosition) {
     m_simPosition.Set(pos);
@@ -64,10 +64,10 @@ void XRPServo::SetAngle(units::radian_t angleRadians) {
 
 units::radian_t XRPServo::GetAngle() const {
   if (m_simPosition) {
-    return units::radian_t{m_simPosition.Get()*std::numbers::pi};
+    return units::radian_t{m_simPosition.Get() * std::numbers::pi};
   }
 
-  return units::radian_t{std::numbers::pi/2};
+  return units::radian_t{std::numbers::pi / 2};
 }
 
 void XRPServo::SetPosition(double pos) {
