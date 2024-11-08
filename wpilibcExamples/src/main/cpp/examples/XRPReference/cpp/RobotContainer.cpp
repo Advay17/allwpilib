@@ -29,14 +29,14 @@ void RobotContainer::ConfigureButtonBindings() {
 
   frc2::JoystickButton(&m_controller, 1)
       .OnTrue(frc2::cmd::RunOnce(
-        [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 4}); },
-        {}))
+          [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 4}); },
+          {}))
       .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0_rad); }, {}));
 
   frc2::JoystickButton(&m_controller, 2)
       .OnTrue(frc2::cmd::RunOnce(
-        [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 2}); },
-        {}))
+          [this] { m_arm.SetAngle(units::radian_t{std::numbers::pi / 2}); },
+          {}))
       .OnFalse(frc2::cmd::RunOnce([this] { m_arm.SetAngle(0.0_rad); }, {}));
 
   // Setup SmartDashboard options.
