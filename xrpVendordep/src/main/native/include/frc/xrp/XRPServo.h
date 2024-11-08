@@ -9,6 +9,7 @@
 #include <string>
 
 #include <hal/SimDevice.h>
+#include <units/angle.h>
 
 namespace frc {
 
@@ -34,29 +35,33 @@ class XRPServo {
   /**
    * Set the servo angle.
    *
-   * @param angleDegrees Desired angle in degrees
+   * @param angleRadians Desired angle in radians
    */
-  void SetAngle(double angleDegrees);
+  void SetAngle(units::radian_t angleRadians);
 
   /**
    * Get the servo angle.
    *
-   * @return Current servo angle
+   * @return Current servo angle in radians
    */
-  double GetAngle() const;
+  units::radian_t GetAngle() const;
 
   /**
    * Set the servo position.
    *
    * @param position Desired position (Between 0.0 and 1.0)
+   * @deprecated Use GetAngle instead
    */
+  [[deprecated("Use SetAngle() instead")]]
   void SetPosition(double position);
 
   /**
    * Get the servo position.
    *
    * @return Current servo position
+   * @deprecated Use GetAngle instead
    */
+  [[deprecated("Use GetAngle() instead")]]
   double GetPosition() const;
 
  private:
