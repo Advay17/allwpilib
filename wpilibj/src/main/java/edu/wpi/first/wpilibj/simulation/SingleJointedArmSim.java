@@ -35,6 +35,9 @@ public class SingleJointedArmSim extends LinearSystemSim<N2, N1, N2> {
   // Whether the simulator should simulate gravity.
   private final boolean m_simulateGravity;
 
+  // The strength of gravity.
+  private double m_gravityForce = -9.8;
+
   /**
    * Creates a simulated arm mechanism.
    *

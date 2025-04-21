@@ -29,6 +29,9 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
   // Whether the simulator should simulate gravity.
   private final boolean m_simulateGravity;
 
+  // The strength of gravity.
+  private double m_gravityForce = -9.8;
+
   /**
    * Creates a simulated elevator mechanism.
    *
@@ -225,6 +228,15 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
   }
 
   /**
+   * Sets the force of gravity, useful for simulating tilted elevators. Negative values indicate downward force. The default value is -9.8.
+   * 
+   * @param gravityForce New gravity force in m/s^2.
+   */
+  public void setGravityForce(double gravity) {
+    m_gravityForce = gravity;
+  }
+
+  /**
    * Updates the state of the elevator.
    *
    * @param currentXhat The current state estimate.
@@ -239,7 +251,7 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
             (x, _u) -> {
               Matrix<N2, N1> xdot = m_plant.getA().times(x).plus(m_plant.getB().times(_u));
               if (m_simulateGravity) {
-                xdot = xdot.plus(VecBuilder.fill(0, -9.8));
+                xdot = xdot.plus(VecBuilder.fill(0, m_gravityForce));
               }
               return xdot;
             },
