@@ -90,6 +90,7 @@ public class ElevatorFeedforward implements ProtobufSerializable, StructSerializ
    * Sets the static gain.
    *
    * @param ks The static gain in volts.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setKs(double ks) {
     this.ks = ks;
@@ -99,6 +100,7 @@ public class ElevatorFeedforward implements ProtobufSerializable, StructSerializ
    * Sets the gravity gain.
    *
    * @param kg The gravity gain in volts.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setKg(double kg) {
     this.kg = kg;
@@ -108,6 +110,7 @@ public class ElevatorFeedforward implements ProtobufSerializable, StructSerializ
    * Sets the velocity gain.
    *
    * @param kv The velocity gain in V/(m/s).
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setKv(double kv) {
     this.kv = kv;
@@ -117,6 +120,7 @@ public class ElevatorFeedforward implements ProtobufSerializable, StructSerializ
    * Sets the acceleration gain.
    *
    * @param ka The acceleration gain in V/(m/s²).
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setKa(double ka) {
     this.ka = ka;

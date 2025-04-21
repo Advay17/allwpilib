@@ -77,6 +77,7 @@ public class ProfiledPIDController implements Sendable {
    * @param Kp The proportional coefficient. Must be &gt;= 0.
    * @param Ki The integral coefficient. Must be &gt;= 0.
    * @param Kd The differential coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setPID(double Kp, double Ki, double Kd) {
     m_controller.setPID(Kp, Ki, Kd);
@@ -86,6 +87,7 @@ public class ProfiledPIDController implements Sendable {
    * Sets the proportional coefficient of the PID controller gain.
    *
    * @param Kp The proportional coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setP(double Kp) {
     m_controller.setP(Kp);
@@ -95,6 +97,7 @@ public class ProfiledPIDController implements Sendable {
    * Sets the integral coefficient of the PID controller gain.
    *
    * @param Ki The integral coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setI(double Ki) {
     m_controller.setI(Ki);
@@ -104,6 +107,7 @@ public class ProfiledPIDController implements Sendable {
    * Sets the differential coefficient of the PID controller gain.
    *
    * @param Kd The differential coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setD(double Kd) {
     m_controller.setD(Kd);

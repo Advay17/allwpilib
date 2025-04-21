@@ -127,6 +127,7 @@ public class PIDController implements Sendable, AutoCloseable {
    * @param kp The proportional coefficient.
    * @param ki The integral coefficient.
    * @param kd The derivative coefficient.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setPID(double kp, double ki, double kd) {
     m_kp = kp;
@@ -138,6 +139,7 @@ public class PIDController implements Sendable, AutoCloseable {
    * Sets the Proportional coefficient of the PID controller gain.
    *
    * @param kp The proportional coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setP(double kp) {
     m_kp = kp;
@@ -147,6 +149,7 @@ public class PIDController implements Sendable, AutoCloseable {
    * Sets the Integral coefficient of the PID controller gain.
    *
    * @param ki The integral coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setI(double ki) {
     m_ki = ki;
@@ -156,6 +159,7 @@ public class PIDController implements Sendable, AutoCloseable {
    * Sets the Differential coefficient of the PID controller gain.
    *
    * @param kd The differential coefficient. Must be &gt;= 0.
+   * @implSpec This method should only be used for online tuning. It is not intended to be used for gain scheduling or similar use cases.
    */
   public void setD(double kd) {
     m_kd = kd;
