@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.simulation;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
@@ -32,8 +33,8 @@ public class SingleJointedArmSim extends LinearSystemSim<N2, N1, N2> {
   // The maximum angle that the arm is capable of.
   private final double m_maxAngle;
 
-  // Whether the simulator should simulate gravity.
-  private final boolean m_simulateGravity;
+  // The magnitude of the gravity force vector.
+  private final Translation2d m_gravityStrengthNewtons;
 
   /**
    * Creates a simulated arm mechanism.
@@ -46,7 +47,82 @@ public class SingleJointedArmSim extends LinearSystemSim<N2, N1, N2> {
    * @param armLengthMeters The length of the arm.
    * @param minAngleRads The minimum angle that the arm is capable of.
    * @param maxAngleRads The maximum angle that the arm is capable of.
-   * @param simulateGravity Whether gravity should be simulated or not.
+   * @param gravityStrengthNewtons The gravity force to be simulated in Newtons, to be modified to account for tilted arms.
+   * @param startingAngleRads The initial position of the Arm simulation in radians.
+   * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
+   *     noise is desired. If present must have 1 element for position.
+   */
+  @SuppressWarnings("this-escape")
+  public SingleJointedArmSim(
+      LinearSystem<N2, N1, N2> plant,
+      DCMotor gearbox,
+      double gearing,
+      double armLengthMeters,
+      double minAngleRads,
+      double maxAngleRads,
+      Translation2d gravityStrengthNewtons,
+      double startingAngleRads,
+      double... measurementStdDevs) {
+    super(plant, measurementStdDevs);
+    m_gearbox = gearbox;
+    m_gearing = gearing;
+    m_armLenMeters = armLengthMeters;
+    m_minAngle = minAngleRads;
+    m_maxAngle = maxAngleRads;
+    m_gravityStrengthNewtons = gravityStrengthNewtons;
+
+    setState(startingAngleRads, 0.0);
+  }
+
+  /**
+   * Creates a simulated arm mechanism.
+   *
+   * @param gearbox The type of and number of motors in the arm gearbox.
+   * @param gearing The gearing of the arm (numbers greater than 1 represent reductions).
+   * @param jKgMetersSquared The moment of inertia of the arm; can be calculated from CAD software.
+   * @param armLengthMeters The length of the arm.
+   * @param minAngleRads The minimum angle that the arm is capable of.
+   * @param maxAngleRads The maximum angle that the arm is capable of.
+   * @param gravityStrengthNewtons The gravity force to be simulated in Newtons, to be modified to account for tilted arms.
+   * @param startingAngleRads The initial position of the Arm simulation in radians.
+   * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
+   *     noise is desired. If present must have 1 element for position.
+   */
+  public SingleJointedArmSim(
+      DCMotor gearbox,
+      double gearing,
+      double jKgMetersSquared,
+      double armLengthMeters,
+      double minAngleRads,
+      double maxAngleRads,
+      Translation2d gravityStrengthNewtons,
+      double startingAngleRads,
+      double... measurementStdDevs) {
+    this(
+        LinearSystemId.createSingleJointedArmSystem(gearbox, jKgMetersSquared, gearing),
+        gearbox,
+        gearing,
+        armLengthMeters,
+        minAngleRads,
+        maxAngleRads,
+        gravityStrengthNewtons,
+        startingAngleRads,
+        measurementStdDevs);
+  }
+
+  /**
+   * Creates a simulated arm mechanism.
+   *
+   * @param plant The linear system that represents the arm. This system can be created with {@link
+   *     edu.wpi.first.math.system.plant.LinearSystemId#createSingleJointedArmSystem(DCMotor,
+   *     double, double)}.
+   * @param gearbox The type of and number of motors in the arm gearbox.
+   * @param gearing The gearing of the arm (numbers greater than 1 represent reductions).
+   * @param armLengthMeters The length of the arm.
+   * @param minAngleRads The minimum angle that the arm is capable of.
+   * @param maxAngleRads The maximum angle that the arm is capable of.
+   * @param simulateGravity Whether gravity should be simulated or not. If this value is true, a
+   *     gravity force of 9.8 Newtons in the downward direction will be used.
    * @param startingAngleRads The initial position of the Arm simulation in radians.
    * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
    *     noise is desired. If present must have 1 element for position.
@@ -62,15 +138,16 @@ public class SingleJointedArmSim extends LinearSystemSim<N2, N1, N2> {
       boolean simulateGravity,
       double startingAngleRads,
       double... measurementStdDevs) {
-    super(plant, measurementStdDevs);
-    m_gearbox = gearbox;
-    m_gearing = gearing;
-    m_armLenMeters = armLengthMeters;
-    m_minAngle = minAngleRads;
-    m_maxAngle = maxAngleRads;
-    m_simulateGravity = simulateGravity;
-
-    setState(startingAngleRads, 0.0);
+    this(
+        plant,
+        gearbox,
+        gearing,
+        armLengthMeters,
+        minAngleRads,
+        maxAngleRads,
+        new Translation2d(0, simulateGravity ? -9.8 : 0.0),
+        startingAngleRads,
+        measurementStdDevs);
   }
 
   /**
@@ -247,10 +324,9 @@ public class SingleJointedArmSim extends LinearSystemSim<N2, N1, N2> {
         NumericalIntegration.rkdp(
             (Matrix<N2, N1> x, Matrix<N1, N1> _u) -> {
               Matrix<N2, N1> xdot = m_plant.getA().times(x).plus(m_plant.getB().times(_u));
-              if (m_simulateGravity) {
-                double alphaGrav = 3.0 / 2.0 * -9.8 * Math.cos(x.get(0, 0)) / m_armLenMeters;
-                xdot = xdot.plus(VecBuilder.fill(0, alphaGrav));
-              }
+              double alphaGrav =
+                  3.0 / 2.0 * -m_gravityStrengthNewtons.getY() * Math.cos(x.get(0, 0)) / m_armLenMeters;
+              xdot = xdot.plus(VecBuilder.fill(0, alphaGrav));
               return xdot;
             },
             currentXhat,

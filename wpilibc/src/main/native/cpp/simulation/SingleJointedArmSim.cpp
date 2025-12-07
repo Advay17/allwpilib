@@ -15,11 +15,10 @@
 
 using namespace frc;
 using namespace frc::sim;
-
 SingleJointedArmSim::SingleJointedArmSim(
     const LinearSystem<2, 1, 2>& system, const DCMotor& gearbox, double gearing,
     units::meter_t armLength, units::radian_t minAngle,
-    units::radian_t maxAngle, bool simulateGravity,
+    units::radian_t maxAngle, units::newton_t gravityStrength,
     units::radian_t startingAngle,
     const std::array<double, 2>& measurementStdDevs)
     : LinearSystemSim<2, 1, 2>(system, measurementStdDevs),
@@ -28,7 +27,31 @@ SingleJointedArmSim::SingleJointedArmSim(
       m_maxAngle(maxAngle),
       m_gearbox(gearbox),
       m_gearing(gearing),
-      m_simulateGravity(simulateGravity) {
+      m_gravityStrength(gravityStrength) {
+  SetState(startingAngle, 0_rad_per_s);
+}
+
+SingleJointedArmSim::SingleJointedArmSim(
+    const DCMotor& gearbox, double gearing, units::kilogram_square_meter_t moi,
+    units::meter_t armLength, units::radian_t minAngle,
+    units::radian_t maxAngle, units::newton_t gravityStrength,
+    units::radian_t startingAngle,
+    const std::array<double, 2>& measurementStdDevs)
+    : SingleJointedArmSim(
+          LinearSystemId::SingleJointedArmSystem(gearbox, moi, gearing),
+          gearbox, gearing, armLength, minAngle, maxAngle, gravityStrength,
+          startingAngle, measurementStdDevs) {}
+
+SingleJointedArmSim::SingleJointedArmSim(
+    const LinearSystem<2, 1, 2>& system, const DCMotor& gearbox, double gearing,
+    units::meter_t armLength, units::radian_t minAngle,
+    units::radian_t maxAngle, bool simulateGravity,
+    units::radian_t startingAngle,
+    const std::array<double, 2>& measurementStdDevs)
+    : SingleJointedArmSim(
+          LinearSystemSim<2, 1, 2>(system, measurementStdDevs),
+          gearbox, gearing, armLength, minAngle, maxAngle, simulateGravity ? 9.8_N : 0_N,
+          startingAngle, measurementStdDevs) {
   SetState(startingAngle, 0_rad_per_s);
 }
 
