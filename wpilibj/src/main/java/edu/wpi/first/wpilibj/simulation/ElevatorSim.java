@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.simulation;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
@@ -26,8 +27,106 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
   // The max allowable height for the elevator.
   private final double m_maxHeight;
 
-  // Whether the simulator should simulate gravity.
-  private final boolean m_simulateGravity;
+  // The magnitude of the gravity force vector.
+  private final Translation2d m_gravityStrengthNewtons;
+
+  /**
+   * Creates a simulated elevator mechanism.
+   *
+   * @param plant The linear system that represents the elevator. This system can be created with
+   *     {@link edu.wpi.first.math.system.plant.LinearSystemId#createElevatorSystem(DCMotor, double,
+   *     double, double)}.
+   * @param gearbox The type of and number of motors in the elevator gearbox.
+   * @param minHeightMeters The min allowable height of the elevator.
+   * @param maxHeightMeters The max allowable height of the elevator.
+   * @param gravityStrengthNewtons The gravity force to be simulated in Newtons, to be modified to account for tilted elevators.
+   * @param startingHeightMeters The starting height of the elevator.
+   * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
+   *     noise is desired. If present must have 1 element for position.
+   */
+  @SuppressWarnings("this-escape")
+  public ElevatorSim(
+      LinearSystem<N2, N1, N2> plant,
+      DCMotor gearbox,
+      double minHeightMeters,
+      double maxHeightMeters,
+      Translation2d gravityStrengthNewtons,
+      double startingHeightMeters,
+      double... measurementStdDevs) {
+    super(plant, measurementStdDevs);
+    m_gearbox = gearbox;
+    m_minHeight = minHeightMeters;
+    m_maxHeight = maxHeightMeters;
+    m_gravityStrengthNewtons = gravityStrengthNewtons;
+
+    setState(startingHeightMeters, 0);
+  }
+
+  /**
+   * Creates a simulated elevator mechanism.
+   *
+   * @param kV The velocity gain.
+   * @param kA The acceleration gain.
+   * @param gearbox The type of and number of motors in the elevator gearbox.
+   * @param minHeightMeters The min allowable height of the elevator.
+   * @param maxHeightMeters The max allowable height of the elevator.
+   * @param gravityStrengthNewtons The gravity force to be simulated in Newtons, to be modified to account for tilted elevators.
+   * @param startingHeightMeters The starting height of the elevator.
+   * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
+   *     noise is desired. If present must have 1 element for position.
+   */
+  public ElevatorSim(
+      double kV,
+      double kA,
+      DCMotor gearbox,
+      double minHeightMeters,
+      double maxHeightMeters,
+      Translation2d gravityStrengthNewtons,
+      double startingHeightMeters,
+      double... measurementStdDevs) {
+    this(
+        LinearSystemId.identifyPositionSystem(kV, kA),
+        gearbox,
+        minHeightMeters,
+        maxHeightMeters,
+        gravityStrengthNewtons,
+        startingHeightMeters,
+        measurementStdDevs);
+  }
+
+  /**
+   * Creates a simulated elevator mechanism.
+   *
+   * @param gearbox The type of and number of motors in the elevator gearbox.
+   * @param gearing The gearing of the elevator (numbers greater than 1 represent reductions).
+   * @param carriageMassKg The mass of the elevator carriage.
+   * @param drumRadiusMeters The radius of the drum that the elevator spool is wrapped around.
+   * @param minHeightMeters The min allowable height of the elevator.
+   * @param maxHeightMeters The max allowable height of the elevator.
+   * @param gravityStrengthNewtons The gravity force to be simulated in Newtons, to be modified to account for tilted elevators.
+   * @param startingHeightMeters The starting height of the elevator.
+   * @param measurementStdDevs The standard deviations of the measurements. Can be omitted if no
+   *     noise is desired. If present must have 1 element for position.
+   */
+  public ElevatorSim(
+      DCMotor gearbox,
+      double gearing,
+      double carriageMassKg,
+      double drumRadiusMeters,
+      double minHeightMeters,
+      double maxHeightMeters,
+      Translation2d gravityStrengthNewtons,
+      double startingHeightMeters,
+      double... measurementStdDevs) {
+    this(
+        LinearSystemId.createElevatorSystem(gearbox, carriageMassKg, drumRadiusMeters, gearing),
+        gearbox,
+        minHeightMeters,
+        maxHeightMeters,
+        gravityStrengthNewtons,
+        startingHeightMeters,
+        measurementStdDevs);
+  }
 
   /**
    * Creates a simulated elevator mechanism.
@@ -52,13 +151,7 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
       boolean simulateGravity,
       double startingHeightMeters,
       double... measurementStdDevs) {
-    super(plant, measurementStdDevs);
-    m_gearbox = gearbox;
-    m_minHeight = minHeightMeters;
-    m_maxHeight = maxHeightMeters;
-    m_simulateGravity = simulateGravity;
-
-    setState(startingHeightMeters, 0);
+    this(plant, gearbox, minHeightMeters, maxHeightMeters, new Translation2d(0, (simulateGravity)?-9.8: 0), startingHeightMeters, measurementStdDevs);
   }
 
   /**
@@ -238,9 +331,7 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
         NumericalIntegration.rkdp(
             (x, _u) -> {
               Matrix<N2, N1> xdot = m_plant.getA().times(x).plus(m_plant.getB().times(_u));
-              if (m_simulateGravity) {
-                xdot = xdot.plus(VecBuilder.fill(0, -9.8));
-              }
+              xdot = xdot.plus(VecBuilder.fill(0, m_gravityStrengthNewtons.getY()));
               return xdot;
             },
             currentXhat,
