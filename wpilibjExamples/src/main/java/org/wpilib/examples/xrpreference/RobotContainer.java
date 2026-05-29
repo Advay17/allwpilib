@@ -4,6 +4,8 @@
 
 package org.wpilib.examples.xrpreference;
 
+import static org.wpilib.units.Units.Degrees;
+
 import org.wpilib.command2.Command;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.PrintCommand;
@@ -64,13 +66,13 @@ public class RobotContainer {
 
     JoystickButton joystickAButton = new JoystickButton(controller, 1);
     joystickAButton
-        .onTrue(new InstantCommand(() -> arm.setAngle(45.0), arm))
-        .onFalse(new InstantCommand(() -> arm.setAngle(0.0), arm));
+        .onTrue(new InstantCommand(() -> arm.setAngle(Degrees.of(45.0)), arm))
+        .onFalse(new InstantCommand(() -> arm.setAngle(Degrees.of(0.0)), arm));
 
     JoystickButton joystickBButton = new JoystickButton(controller, 2);
     joystickBButton
-        .onTrue(new InstantCommand(() -> arm.setAngle(90.0), arm))
-        .onFalse(new InstantCommand(() -> arm.setAngle(0.0), arm));
+        .onTrue(new InstantCommand(() -> arm.setAngle(Degrees.of(90.0)), arm))
+        .onFalse(new InstantCommand(() -> arm.setAngle(Degrees.of(0.0)), arm));
 
     // Setup SmartDashboard options
     chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(drivetrain));

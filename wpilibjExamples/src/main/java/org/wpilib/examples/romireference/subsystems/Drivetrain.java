@@ -9,6 +9,7 @@ import org.wpilib.drive.DifferentialDrive;
 import org.wpilib.hardware.motor.Spark;
 import org.wpilib.hardware.rotation.Encoder;
 import org.wpilib.romi.RomiGyro;
+import org.wpilib.units.measure.Angle;
 import org.wpilib.util.sendable.SendableRegistry;
 
 public class Drivetrain extends SubsystemBase {
@@ -80,27 +81,27 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Current angle of the Romi around the X-axis.
    *
-   * @return The current angle of the Romi in degrees
+   * @return The current angle of the Romi
    */
-  public double getGyroAngleX() {
+  public Angle getGyroAngleX() {
     return gyro.getAngleX();
   }
 
   /**
    * Current angle of the Romi around the Y-axis.
    *
-   * @return The current angle of the Romi in degrees
+   * @return The current angle of the Romi
    */
-  public double getGyroAngleY() {
+  public Angle getGyroAngleY() {
     return gyro.getAngleY();
   }
 
   /**
    * Current angle of the Romi around the Z-axis.
    *
-   * @return The current angle of the Romi in degrees
+   * @return The current angle of the Romi
    */
-  public double getGyroAngleZ() {
+  public Angle getGyroAngleZ() {
     return gyro.getAngleZ();
   }
 

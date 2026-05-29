@@ -5,6 +5,7 @@
 package org.wpilib.examples.xrpreference.subsystems;
 
 import org.wpilib.command2.SubsystemBase;
+import org.wpilib.units.measure.Angle;
 import org.wpilib.xrp.XRPServo;
 
 public class Arm extends SubsystemBase {
@@ -26,7 +27,7 @@ public class Arm extends SubsystemBase {
    *
    * @param angleDeg Desired arm angle in degrees
    */
-  public void setAngle(double angleDeg) {
+  public void setAngle(Angle angleDeg) {
     armServo.setAngle(angleDeg);
   }
 }

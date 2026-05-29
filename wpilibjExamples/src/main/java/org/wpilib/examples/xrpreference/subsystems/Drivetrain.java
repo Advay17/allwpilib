@@ -7,6 +7,7 @@ package org.wpilib.examples.xrpreference.subsystems;
 import org.wpilib.command2.SubsystemBase;
 import org.wpilib.drive.DifferentialDrive;
 import org.wpilib.hardware.rotation.Encoder;
+import org.wpilib.units.measure.Angle;
 import org.wpilib.util.sendable.SendableRegistry;
 import org.wpilib.xrp.XRPGyro;
 import org.wpilib.xrp.XRPMotor;
@@ -85,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return The current angle of the XRP in degrees
    */
-  public double getGyroAngleX() {
+  public Angle getGyroAngleX() {
     return gyro.getAngleX();
   }
 
@@ -94,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return The current angle of the XRP in degrees
    */
-  public double getGyroAngleY() {
+  public Angle getGyroAngleY() {
     return gyro.getAngleY();
   }
 
@@ -103,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return The current angle of the XRP in degrees
    */
-  public double getGyroAngleZ() {
+  public Angle getGyroAngleZ() {
     return gyro.getAngleZ();
   }
 

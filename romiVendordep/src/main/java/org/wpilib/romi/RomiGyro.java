@@ -7,6 +7,12 @@ package org.wpilib.romi;
 import org.wpilib.hardware.hal.SimDevice;
 import org.wpilib.hardware.hal.SimDevice.Direction;
 import org.wpilib.hardware.hal.SimDouble;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.units.measure.Angle;
+import org.wpilib.units.measure.AngularVelocity;
+
+import static org.wpilib.units.Units.DegreesPerSecond;
+import static org.wpilib.units.Units.Degrees;
 
 /**
  * Use a rate gyro to return the robots heading relative to a starting position.
@@ -50,81 +56,81 @@ public class RomiGyro {
   }
 
   /**
-   * Get the rate of turn in degrees-per-second around the X-axis.
+   * Get the rate of turn around the X-axis.
    *
-   * @return rate of turn in degrees-per-second
+   * @return rate of turn as a measure.
    */
-  public double getRateX() {
+  public AngularVelocity getRateX() {
     if (m_simRateX != null) {
-      return m_simRateX.get();
+      return DegreesPerSecond.of(m_simRateX.get());
     }
 
-    return 0.0;
+    return DegreesPerSecond.of(0.0);
   }
 
   /**
-   * Get the rate of turn in degrees-per-second around the Y-axis.
+   * Get the rate of turn around the Y-axis.
    *
-   * @return rate of turn in degrees-per-second
+   * @return rate of turn as a measure.
    */
-  public double getRateY() {
+  public AngularVelocity getRateY() {
     if (m_simRateY != null) {
-      return m_simRateY.get();
+      return DegreesPerSecond.of(m_simRateY.get());
     }
 
-    return 0.0;
+    return DegreesPerSecond.of(0.0);
   }
 
   /**
-   * Get the rate of turn in degrees-per-second around the Z-axis.
+   * Get the rate of turn around the Z-axis.
    *
-   * @return rate of turn in degrees-per-second
+   * @return rate of turn as a measure.
    */
-  public double getRateZ() {
+  public AngularVelocity getRateZ() {
     if (m_simRateZ != null) {
-      return m_simRateZ.get();
+      return DegreesPerSecond.of(m_simRateZ.get());
     }
 
-    return 0.0;
+    return DegreesPerSecond.of(0.0);
   }
 
   /**
    * Get the currently reported angle around the X-axis.
    *
-   * @return current angle around X-axis in degrees
+   * @return current angle around X-axis as a measure.
    */
-  public double getAngleX() {
+  public Angle getAngleX() {
     if (m_simAngleX != null) {
-      return m_simAngleX.get() - m_angleXOffset;
+      return Degrees.of(m_simAngleX.get() - m_angleXOffset);
     }
 
-    return 0.0;
+    return Degrees.of(0.0);
   }
 
   /**
    * Get the currently reported angle around the X-axis.
    *
-   * @return current angle around Y-axis in degrees
+   * @return current angle around Y-axis as a measure.
    */
-  public double getAngleY() {
+  public Angle getAngleY() {
     if (m_simAngleY != null) {
-      return m_simAngleY.get() - m_angleYOffset;
+      return Degrees.of(m_simAngleY.get() - m_angleYOffset);
     }
 
-    return 0.0;
+    return Degrees.of(0.0);
   }
 
   /**
    * Get the currently reported angle around the Z-axis.
    *
-   * @return current angle around Z-axis in degrees
+   * @return current angle around Z-axis as a measure.
    */
-  public double getAngleZ() {
+  public Angle getAngleZ() {
     if (m_simAngleZ != null) {
-      return m_simAngleZ.get() - m_angleZOffset;
+      return Degrees.of(m_simAngleZ.get() - m_angleZOffset);
     }
 
-    return 0.0;
+    return Degrees.of(0.0);
   }
 
   /** Reset the gyro angles to 0. */
@@ -144,10 +150,19 @@ public class RomiGyro {
    * wouldn't want to see a discontinuity in the gyro output as it sweeps from 360 to 0 on the
    * second time around.
    *
-   * @return the current heading of the robot in degrees.
+   * @return the current heading of the robot as a measure.
    */
-  public double getAngle() {
+  public Angle getAngle() {
     return getAngleZ();
+  }
+
+  /**
+   * Gets the angle the robot is facing.
+   *
+   * @return A Rotation2d with the current heading.
+   */
+  public Rotation2d getRotation2d() {
+    return new Rotation2d(getAngle());
   }
 
   /**
@@ -155,9 +170,9 @@ public class RomiGyro {
    *
    * <p>The rate is based on the most recent reading of the gyro.
    *
-   * @return the current rate in degrees per second
+   * @return the current rate as a measure.
    */
-  public double getRate() {
+  public AngularVelocity getRate() {
     return getRateZ();
   }
 

@@ -4,11 +4,14 @@
 
 package org.wpilib.xrp;
 
+import static org.wpilib.units.Units.Degrees;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import org.wpilib.hardware.hal.SimDevice;
 import org.wpilib.hardware.hal.SimDevice.Direction;
 import org.wpilib.hardware.hal.SimDouble;
+import org.wpilib.units.measure.Angle;
 
 /**
  * XRPServo.
@@ -64,9 +67,10 @@ public class XRPServo {
   /**
    * Set the servo angle.
    *
-   * @param angleDegrees Desired angle in degrees
+   * @param angleDegrees Desired angle as a measure
    */
-  public void setAngle(double angleDegrees) {
+  public void setAngle(Angle angle) {
+    double angleDegrees = angle.in(Degrees);
     if (angleDegrees < 0.0) {
       angleDegrees = 0.0;
     }
@@ -85,14 +89,14 @@ public class XRPServo {
   /**
    * Get the servo angle.
    *
-   * @return Current servo angle
+   * @return Current servo angle as a measure
    */
-  public double getAngle() {
+  public Angle getAngle() {
     if (m_simPosition != null) {
-      return m_simPosition.get() * 180.0;
+      return Degrees.of(m_simPosition.get() * 180.0);
     }
 
-    return 90.0;
+    return Degrees.of(90.0);
   }
 
   /**

@@ -4,7 +4,10 @@
 
 package org.wpilib.xrp;
 
+import static org.wpilib.units.Units.Meters;
+
 import org.wpilib.hardware.discrete.AnalogInput;
+import org.wpilib.units.measure.Distance;
 
 /** This class represents the ultrasonic rangefinder on an XRP robot. */
 public class XRPRangefinder {
@@ -22,7 +25,7 @@ public class XRPRangefinder {
    *
    * @return distance in meters
    */
-  public double getDistance() {
-    return (m_rangefinder.getVoltage() / 5.0) * 4.0;
+  public Distance getDistance() {
+    return Meters.of((m_rangefinder.getVoltage() / 5.0) * 4.0);
   }
 }
