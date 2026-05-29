@@ -8,7 +8,7 @@ ext {
     devMain = 'org.wpilib.units.DevMain'
 }
 
-apply from: "${rootDir}/shared/java/javacommon.gradle"
+apply from: "${rootDir}/shared/jni/setupBuild.gradle"
 
 dependencies {
 }

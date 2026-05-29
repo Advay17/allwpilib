@@ -75,6 +75,7 @@ model {
     binaries {
         all {
             it.cppCompiler.define 'SLEIPNIR_EXPORTS'
+            lib project: ':wpiunits', library: 'wpiunits', linkage: 'shared'
         }
     }
 }
@@ -100,25 +101,3 @@ dependencies {
 
 sourceSets.main.java.srcDir "${projectDir}/src/generated/main/java"
 sourceSets.main.resources.srcDir "${projectDir}/src/main/proto"
-
-task unitsHeaders(type: Zip) {
-    destinationDirectory = file("$buildDir/outputs")
-    archiveBaseName = zipBaseName
-    archiveClassifier = "units"
-
-    from(licenseFile) {
-        into '/'
-    }
-
-    ext.includeDirs = [
-        project.file('src/main/native/include/units')
-    ]
-
-    ext.includeDirs.each {
-        from(it) {
-            into '/units'
-        }
-    }
-}
-
-addTaskToCopyAllOutputs(unitsHeaders)

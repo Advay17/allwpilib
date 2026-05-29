@@ -3,6 +3,7 @@ load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_files")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_python//python:defs.bzl", "py_binary")
 load("//shared/bazel/rules:java_rules.bzl", "wpilib_java_junit5_test", "wpilib_java_library")
+load("//shared/bazel/rules:cc_rules.bzl", "wpilib_cc_library", "wpilib_cc_shared_library", "wpilib_cc_static_library")
 load("//wpiunits:generate_wpiunits.bzl", "generate_wpiunits")
 
 py_binary(
@@ -54,5 +55,40 @@ java_binary(
     main_class = "org.wpilib.units.DevMain",
     deps = [
         ":wpiunits-java",
+    ],
+)
+
+wpilib_cc_library(
+    name = "wpiunits",
+    hdrs = glob(["src/main/native/include/**"]),
+    includes = [
+        "src/main/native/include",
+    ],
+    local_defines = [
+        "WPILIB_EXPORTS"
+    ],
+    strip_include_prefix = "src/main/native/include",
+    visibility = ["//visibility:public"],
+)
+
+wpilib_cc_shared_library(
+    name = "shared/wpiunits",
+    auto_export_windows_symbols = False,
+    dynamic_deps = [
+    ],
+    visibility = ["//visibility:public"],
+    win_def_file = ":wpiunits_def",
+    deps = [
+        ":wpiunits",
+    ],
+)
+
+wpilib_cc_static_library(
+    name = "static/wpiunits",
+    static_deps = [
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":wpiunits",
     ],
 )

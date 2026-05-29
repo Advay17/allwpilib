@@ -174,6 +174,7 @@ wpilib_cc_library(
     deps = [
         ":nanopb-generated-headers",
         "//wpiutil",
+        "//wpiunits",
     ],
 )
 
@@ -193,6 +194,7 @@ wpilib_cc_shared_library(
     auto_export_windows_symbols = False,
     dynamic_deps = [
         "//wpiutil:shared/wpiutil",
+        "//wpiunits:shared/wpiunits",
     ],
     visibility = ["//visibility:public"],
     win_def_file = ":wpimath_def",
@@ -205,6 +207,7 @@ wpilib_cc_static_library(
     name = "static/wpimath",
     static_deps = [
         "//wpiutil:static/wpiutil",
+        "//wpiunits:static/wpiunits",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -228,6 +231,7 @@ wpilib_cc_shared_library(
     dynamic_deps = [
         ":shared/wpimath",
         "//wpiutil:shared/wpiutil",
+        "//wpiunits:shared/wpiunits",
     ],
     use_debug_name = False,
     visibility = ["//visibility:public"],
