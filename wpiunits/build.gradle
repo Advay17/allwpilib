@@ -1,6 +1,6 @@
 ext {
     useJava = true
-    useCpp = false
+    useCpp = true
     baseId = 'wpiunits'
     groupId = 'org.wpilib.wpiunits'
 
@@ -12,5 +12,44 @@ apply from: "${rootDir}/shared/java/javacommon.gradle"
 
 dependencies {
 }
+
+model {
+    components {
+        all {
+            it.sources.each {
+                it.exportedHeaders {
+                    srcDirs 'src/main/native/include'
+                }
+            }
+        }
+    }
+}
+
+nativeUtils.exportsConfigs {
+    wpiunits {
+    }
+}
+
+task unitsHeaders(type: Zip) {
+    destinationDirectory = file("$buildDir/outputs")
+    archiveBaseName = zipBaseName
+    archiveClassifier = "units"
+
+    from(licenseFile) {
+        into '/'
+    }
+
+    ext.includeDirs = [
+        project.file('src/main/native/include/units')
+    ]
+
+    ext.includeDirs.each {
+        from(it) {
+            into '/units'
+        }
+    }
+}
+
+addTaskToCopyAllOutputs(unitsHeaders)
 
 sourceSets.main.java.srcDir "${projectDir}/src/generated/main/java"
