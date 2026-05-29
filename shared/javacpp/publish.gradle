@@ -5,7 +5,7 @@ def outputsFolder = file("$buildDir/outputs")
 def baseArtifactId = nativeName
 def artifactGroupId = "org.wpilib.${nativeName}"
 def zipBaseName = makeZipBaseName(artifactGroupId, "${baseArtifactId}-cpp")
-
+ext.zipBaseName = zipBaseName
 def licenseFile = file("$rootDir/license.md")
 
 task cppSourcesZip(type: Zip) {

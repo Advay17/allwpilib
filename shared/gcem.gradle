@@ -1,0 +1,7 @@
+model {
+    binaries {
+        all {
+            lib project: ':thirdparty:gcem', library: 'gcem', linkage: 'static'
+        }
+    }
+}

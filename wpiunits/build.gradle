@@ -8,7 +8,8 @@ ext {
     devMain = 'org.wpilib.units.DevMain'
 }
 
-apply from: "${rootDir}/shared/jni/setupBuild.gradle"
+apply from: "${rootDir}/shared/javacpp/setupBuild.gradle"
+apply from: "${rootDir}/shared/gcem.gradle"
 
 dependencies {
 }
@@ -20,6 +21,13 @@ model {
                 it.exportedHeaders {
                     srcDirs 'src/main/native/include'
                 }
+            }
+        }
+    }
+    binaries {
+        all {
+            if (it instanceof GoogleTestTestSuiteBinarySpec) {
+                lib project: ':thirdparty:gcem', library: 'gcem', linkage: 'static'
             }
         }
     }

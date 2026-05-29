@@ -34,3 +34,4 @@ if(WITH_JAVA_SOURCE)
 
     install_jar(wpiunits_src_jar DESTINATION ${java_lib_dest})
 endif()
+
