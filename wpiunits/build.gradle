@@ -24,13 +24,6 @@ model {
             }
         }
     }
-    binaries {
-        all {
-            if (it instanceof GoogleTestTestSuiteBinarySpec) {
-                lib project: ':thirdparty:gcem', library: 'gcem', linkage: 'static'
-            }
-        }
-    }
 }
 
 nativeUtils.exportsConfigs {

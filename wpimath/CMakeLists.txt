@@ -131,7 +131,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS FALSE)
 file(GLOB_RECURSE wpimath_protobuf_native_src src/generated/main/native/cpp/wpimath/protobuf/*.cpp)
 
 add_library(protobuf OBJECT ${wpimath_protobuf_native_src})
-target_link_libraries(protobuf wpiutil)
+target_link_libraries(protobuf wpiutil wpiunits gcem)
 
 add_library(wpimath ${wpimath_native_src} $<TARGET_OBJECTS:protobuf>)
 
@@ -167,7 +167,7 @@ if(MSVC)
     target_compile_options(wpimath PUBLIC /utf-8 /bigobj)
 endif()
 wpilib_target_warnings(wpimath)
-target_link_libraries(wpimath wpiutil)
+target_link_libraries(wpimath wpiutil wpiunits gcem)
 
 if(NOT USE_SYSTEM_EIGEN)
     install(
@@ -185,15 +185,10 @@ else()
     target_link_libraries(wpimath Eigen3::Eigen)
 endif()
 
-install(
-    DIRECTORY src/main/native/thirdparty/gcem/include/ src/main/native/thirdparty/sleipnir/include/
-    DESTINATION "${include_dest}/wpimath"
-)
 target_include_directories(
     wpimath
     SYSTEM
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/main/native/thirdparty/gcem/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/main/native/thirdparty/sleipnir/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/main/native/thirdparty/sleipnir/src>
 )
