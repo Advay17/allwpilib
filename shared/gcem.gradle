@@ -1,3 +1,4 @@
+evaluationDependsOn(':thirdparty:gcem')
 model {
     binaries {
         all {

@@ -20,7 +20,6 @@ if(WITH_JAVA)
 
     install_jar(wpiunits_jar DESTINATION ${java_lib_dest})
     install_jar_exports(TARGETS wpiunits_jar FILE wpiunits.cmake DESTINATION share/wpiunits)
-    install(FILES wpiunits-config.cmake DESTINATION share/wpiunits)
 endif()
 
 if(WITH_JAVA_SOURCE)

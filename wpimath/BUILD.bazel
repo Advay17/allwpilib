@@ -20,7 +20,6 @@ filegroup(
     srcs = glob([
         "src/generated/main/native/cpp/wpimath/protobuf/*.h",
         "src/main/native/include/**/*",
-        "src/main/native/thirdparty/gcem/include/**/*",
         "src/main/native/thirdparty/sleipnir/include/**/*",
     ]),
     visibility = ["//visibility:public"],
@@ -117,11 +116,6 @@ pkg_files_headers(
 )
 
 third_party_cc_lib_helper(
-    name = "gcem",
-    include_root = "src/main/native/thirdparty/gcem/include",
-)
-
-third_party_cc_lib_helper(
     name = "sleipnir",
     include_root = "src/main/native/thirdparty/sleipnir/include",
     src_root = "src/main/native/thirdparty/sleipnir/src",
@@ -165,7 +159,6 @@ wpilib_cc_library(
     strip_include_prefix = "src/main/native/include",
     third_party_header_only_libraries = [
         ":eigen",
-        ":gcem",
     ],
     third_party_libraries = [
         ":sleipnir",
@@ -342,7 +335,6 @@ generate_robotpy_native_wrapper_build_info(
     name = "robotpy-native-wpimath-generator",
     pyproject_toml = "src/main/python/native-pyproject.toml",
     third_party_dirs = [
-        "gcem",
         "sleipnir",
     ],
 )

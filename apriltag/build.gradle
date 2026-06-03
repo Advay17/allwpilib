@@ -43,6 +43,7 @@ evaluationDependsOn(':wpimath')
 
 apply from: "${rootDir}/shared/jni/setupBuild.gradle"
 apply from: "${rootDir}/shared/opencv.gradle"
+apply from: "${rootDir}/shared/gcem.gradle"
 
 dependencies {
     implementation project(':wpimath')
