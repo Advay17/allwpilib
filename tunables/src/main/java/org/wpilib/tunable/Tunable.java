@@ -578,6 +578,17 @@ public abstract class Tunable<T> extends TunableBase implements Supplier<T>, Con
       if (proto != null) {
         return createGetterSetterTunable(getter, setter, proto, config);
       }
+    } else {
+      // try other handlers
+      var initialValue = getter.get();
+      var handler = TunableRegistry.getTypeHandler(initialValue);
+      if (handler != null) {
+        Tunable<T> tunable = handler.createTunable(initialValue, config);
+        if (tunable != null) {
+          warnIfUnpublishableTunable(tunable);
+          return tunable;
+        }
+      }
     }
     warnIfUnsupportedBasicType(cls);
     return new BasicTunable<T>(cls, config) {
